@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import type { Movie } from "../../../types/movie";
 import { getPosterUrl } from "../../../utils/image";
 import { motion, useMotionValue } from "motion/react";
+import { useMediaNavigation } from "../../../hooks/useMediaNavigation";
 
 const TRANSITION_DURATION = 0.4;
 const DRAG_BUFFER = 600;
@@ -11,8 +12,8 @@ const Banner = ({ movies }: { movies: Movie[] }) => {
   const [posterIndex, setPosterIndex] = useState<number>(2);
   const [transitionDuration, setTransitionDuration] =
     useState(TRANSITION_DURATION);
-
   const dragX = useMotionValue(0);
+  const { goToDetail } = useMediaNavigation();
 
   const extendedBanners =
     moviesData.length > 0
@@ -104,7 +105,10 @@ const Banner = ({ movies }: { movies: Movie[] }) => {
                   transition={{ delay: 0.8, duration: 0.7, ease: "easeOut" }}
                   className="mt-15 flex gap-5"
                 >
-                  <button className="bg-[#fe0000] rounded-3xl px-9 py-1 font-[500] text-[23px] shadow-[1px_1px_21px_3px_#fe0000] cursor-pointer hover:shadow-[1px_1px_27px_7px_#fe0000] duration-300">
+                  <button
+                    onClick={() => goToDetail("movie", movie.id)}
+                    className="bg-[#fe0000] rounded-3xl px-9 py-1 font-[500] text-[23px] shadow-[1px_1px_21px_3px_#fe0000] cursor-pointer hover:shadow-[1px_1px_27px_7px_#fe0000] duration-300"
+                  >
                     Watch now
                   </button>
                   <button className="border-2 rounded-3xl px-9 py-1 font-[500] text-[23px] cursor-pointer hover:text-red-600 duration-300 hover:bg-amber-50 hover:border-white">

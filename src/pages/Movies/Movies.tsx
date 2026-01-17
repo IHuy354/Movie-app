@@ -20,6 +20,7 @@ function Movies() {
         page={page}
         onPageChange={setPage}
         data={movies}
+        type="movie"
       />
     </div>
   );

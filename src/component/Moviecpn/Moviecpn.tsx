@@ -1,7 +1,9 @@
 import { FaPlay } from "react-icons/fa";
 import { getPosterUrl } from "../../utils/image";
+import { useMediaNavigation } from "../../hooks/useMediaNavigation";
 
-const Moviecpn = ({ title, data, page, onPageChange }) => {
+const Moviecpn = ({ title, data, page, onPageChange, type }) => {
+  const { goToDetail } = useMediaNavigation();
   const handleClick = () => {
     onPageChange(page + 1);
   };
@@ -34,8 +36,14 @@ const Moviecpn = ({ title, data, page, onPageChange }) => {
         </div>
         {/* Danh sách phim  */}
         <div className="grid grid-cols-6 gap-5 mt-15">
-          {data.map((movie) => (
-            <div key={movie.id}>
+          {data.map((movie, index) => (
+            <div
+              key={index}
+              className="cursor-pointer"
+              onClick={() => {
+                goToDetail(type, movie.id);
+              }}
+            >
               <div className="relative group  hover:cursor-pointer">
                 <img
                   className="rounded-3xl"

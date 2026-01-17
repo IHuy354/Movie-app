@@ -19,6 +19,7 @@ function TvSeries() {
         data={movies}
         page={page}
         onPageChange={setPage}
+        type="tv"
       />
     </>
   );

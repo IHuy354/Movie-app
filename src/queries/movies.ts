@@ -1,13 +1,15 @@
 import { useQuery } from "@tanstack/react-query";
 import {
+  getMovieDetail,
+  getMovieSimilar,
   getPagePopularMovies,
   getPageTVMovies,
   getPopularMovies,
   getTopMovies,
   getTopratedTV,
   getTrendingTV,
+  getTVDetail,
 } from "../services/api";
-import { number } from "motion";
 
 export const usePopularMovies = () =>
   useQuery({
@@ -26,6 +28,7 @@ export const useTopRatedMovies = () =>
       return res.data;
     },
   });
+
 
 export const usePopularTV = () =>
   useQuery({
@@ -55,9 +58,40 @@ export const usePagePopularMovies = (page: number) =>
   });
 export const usePageTVMovies = (page: number) =>
   useQuery({
-    queryKey: ["movies", "popular", page],
+    queryKey: ["tv", "page", page],
     queryFn: async () => {
       const res = await getPageTVMovies(page);
       return res.data;
     },
   });
+
+export const useMovieSimilar = (id?: number) => {
+  return useQuery({
+    queryKey: ["movie", "similar", id],
+    queryFn: async () => {
+      const res = await getMovieSimilar(id!);
+      return res.data;
+    },
+    enabled: !!id,
+  });
+};
+// export const useTVDetail = (id?: number) => {
+//   return useQuery({
+//     queryKey: ["tv", "id", id],
+//     queryFn: async () => {
+//       const res = await getTVDetail(id!);
+//       return res.data;
+//     },
+//     enabled: !!id,
+//   });
+// };
+// export const useMovieDetail = (id?: number) => {
+//   return useQuery({
+//     queryKey: ["movie", "id", id],
+//     queryFn: async () => {
+//       const res = await getMovieDetail(id!);
+//       return res.data;
+//     },
+//     enabled: !!id,
+//   });
+// };
