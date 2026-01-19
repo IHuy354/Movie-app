@@ -9,6 +9,7 @@ import {
   getTopratedTV,
   getTrendingTV,
   getTVDetail,
+  searchMedia,
 } from "../services/api";
 
 export const usePopularMovies = () =>
@@ -28,7 +29,6 @@ export const useTopRatedMovies = () =>
       return res.data;
     },
   });
-
 
 export const usePopularTV = () =>
   useQuery({
@@ -75,6 +75,8 @@ export const useMovieSimilar = (id?: number) => {
     enabled: !!id,
   });
 };
+
+
 // export const useTVDetail = (id?: number) => {
 //   return useQuery({
 //     queryKey: ["tv", "id", id],

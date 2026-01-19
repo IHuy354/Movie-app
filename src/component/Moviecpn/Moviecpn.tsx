@@ -1,11 +1,18 @@
 import { FaPlay } from "react-icons/fa";
 import { getPosterUrl } from "../../utils/image";
 import { useMediaNavigation } from "../../hooks/useMediaNavigation";
+import { useState } from "react";
 
-const Moviecpn = ({ title, data, page, onPageChange, type }) => {
+const Moviecpn = ({ title, data, setPage, page, type, setSearch }) => {
   const { goToDetail } = useMediaNavigation();
+  const [keyword, setKeyword] = useState("");
   const handleClick = () => {
-    onPageChange(page + 1);
+    setPage(page + 1);
+  };
+  const handleSearch = (e) => {
+    e.preventDefault();
+    setSearch(keyword);
+    setPage(1);
   };
   return (
     <>
@@ -21,22 +28,27 @@ const Moviecpn = ({ title, data, page, onPageChange, type }) => {
       {/* body  */}
       <div className=" mt-15 pb-10 px-10">
         {/* Thanh tìm kiếm  */}
-        <div className=" relative w-full  max-w-[520px]">
+        <form
+          onSubmit={handleSearch}
+          className=" relative w-full  max-w-[520px]"
+        >
           <input
             type="text"
             placeholder="Enter Keyword "
             className="pl-5 pr-70 py-2 rounded-3xl bg-black outline-none"
+            value={keyword}
+            onChange={(e) => setKeyword(e.target.value)}
           />
           <button
-            type="button"
+            type="submit"
             className="absolute font-[500] right-10 bg-red-600 hover:bg-red-500 transition duration-300 rounded-full px-7 py-2 shadow-[1px_1px_15px_3px_#fe0000]  hover:shadow-[1px_1px_27px_7px_#fe0000] duration-300"
           >
             Search
           </button>
-        </div>
+        </form>
         {/* Danh sách phim  */}
         <div className="grid grid-cols-6 gap-5 mt-15">
-          {data.map((movie, index) => (
+          {data?.map((movie, index) => (
             <div
               key={index}
               className="cursor-pointer"
@@ -46,8 +58,8 @@ const Moviecpn = ({ title, data, page, onPageChange, type }) => {
             >
               <div className="relative group  hover:cursor-pointer">
                 <img
-                  className="rounded-3xl"
-                  src={getPosterUrl(movie.poster_path)}
+                  className="rounded-3xl h-87"
+                  src={getPosterUrl(movie?.poster_path)}
                   alt={movie.title}
                 />
                 {/* Overlay */}

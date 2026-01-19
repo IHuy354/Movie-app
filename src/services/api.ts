@@ -1,5 +1,7 @@
 import axios from "./tmdbClient";
 
+type MediaType = "movie" | "tv";
+
 export const getPopularMovies = async () => {
   const response = await axios.get("/movie/popular");
   return response;
@@ -22,17 +24,16 @@ export const getTopratedTV = async () => {
 //   return response;
 // };
 
-
 export const getPagePopularMovies = async (page: number) => {
   const response = await axios.get(`/movie/popular?page=${page}`);
-  return response;
+  return response.data;
 };
 export const getPageTVMovies = async (page: number) => {
   const response = await axios.get(`/tv/popular?page=${page}`);
-  return response;
+  return response.data;
 };
 
-// detail 
+// detail
 export const getMovieSimilar = async (id: number) => {
   const response = await axios.get(`/movie/${id}/similar`);
   return response;
@@ -65,5 +66,18 @@ export const getTVVideoDetail = async (id: number) => {
   const response = await axios.get(`tv/${id}/videos`);
   return response;
 };
+// tìm kiếm
+export const searchMedia = async (
+  type: MediaType,
+  query: string,
+  page?: number,
+) => {
+  const response = await axios.get(`/search/${type}`, {
+    params: {
+      query,
+      page,
+    },
+  });
 
-
+  return response.data;
+};

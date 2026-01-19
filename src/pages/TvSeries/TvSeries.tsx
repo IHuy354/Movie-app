@@ -1,28 +1,53 @@
 import { useEffect, useState } from "react";
 import Moviecpn from "../../component/Moviecpn/Moviecpn";
-import { usePageTVMovies } from "../../queries/movies";
+import { getPageTVMovies, searchMedia } from "../../services/api";
 
-function TvSeries() {
-  const [page, setPage] = useState<number>(1);
-  const { data } = usePageTVMovies(page);
-  const [movies, setMovies] = useState<any[]>([]);
+const TvSeries = () => {
+  const [page, setPage] = useState(1);
+  const [search, setSearch] = useState("");
+
+  const isSearching = search.trim().length > 0;
+  //data
+  const [defaultMovies, setDefaultMovies] = useState<any[]>([]);
+  const [searchMovies, setSearchMovies] = useState<any[]>([]);
+  const renderData = isSearching ? searchMovies : defaultMovies;
+
 
   useEffect(() => {
-    if (data?.results) {
-      setMovies((prev) => [...prev, ...data.results]);
-    }
-  }, [data]);
+    const fetchData = async () => {
+      try {
+        if (isSearching) {
+          const data = await searchMedia("tv", search, page);
+
+          setSearchMovies((prev) =>
+            page === 1 ? data.results : [...prev, ...data.results],
+          );
+        } else {
+          const data = await getPageTVMovies(page);
+          setDefaultMovies((prev) =>
+            page === 1 ? data?.results : [...prev, ...data.results],
+          );
+        }
+      } catch (err) {
+        console.error(err);
+      }
+    };
+
+    fetchData();
+  }, [page, search]);
+
   return (
     <>
       <Moviecpn
-        title="TV Series"
-        data={movies}
+        title="Tv Series"
+        data={renderData}
+        setPage={setPage}
         page={page}
-        onPageChange={setPage}
         type="tv"
+        setSearch={setSearch}
       />
     </>
   );
-}
+};
 
 export default TvSeries;
