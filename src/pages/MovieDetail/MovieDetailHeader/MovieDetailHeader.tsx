@@ -1,8 +1,7 @@
 import { getPosterUrl } from "../../../utils/image";
 
 const MovieDetailHeader = ({ dataDetail, casts }) => {
-  // console.log("huhu", dataDetail);
-  console.log("tác giả", casts);
+
 
   return (
     <>

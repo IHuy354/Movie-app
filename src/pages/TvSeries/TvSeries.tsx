@@ -12,7 +12,6 @@ const TvSeries = () => {
   const [searchMovies, setSearchMovies] = useState<any[]>([]);
   const renderData = isSearching ? searchMovies : defaultMovies;
 
-
   useEffect(() => {
     const fetchData = async () => {
       try {

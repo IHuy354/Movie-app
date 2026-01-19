@@ -16,7 +16,7 @@ const Footer = () => {
       {/* content  */}
       <div className="relative z-10 p-[64px] flex flex-col items-center">
         <LogoTitle />
-        <div className="flex justify-between gap-30 mt-17">
+        <div className="flex justify-between gap-30 mt-17 cursor-pointer">
           <div>
             <div className={ContentClass()}>Home</div>
             <div className={ContentClass()}>Contact us</div>
