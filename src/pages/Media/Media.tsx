@@ -2,6 +2,7 @@ import { useParams, useSearchParams } from "react-router-dom";
 import { useMediaSearch } from "../../hooks/useMediaSearch";
 import MovieComponent from "../../component/MovieTV/MovieTV";
 import type { MediaType } from "../../services/api";
+import LoadingScreen from "../../component/Loading/LoadingScreen";
 
 const MediaPage = () => {
   const { mediaType } = useParams();
@@ -23,7 +24,7 @@ const MediaPage = () => {
     initialSearch,
   });
 
-  if (isLoading) return <div className="text-center">Loading...</div>;
+  if (isLoading) return <div ><LoadingScreen/></div>;
   if (isError) return <div className="text-center">Error loading data</div>;
 
   return (

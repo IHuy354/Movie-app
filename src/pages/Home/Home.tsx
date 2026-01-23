@@ -1,20 +1,26 @@
 import Banner from "./Banner/Banner";
 import MovieRow from "./MovieRow/MovieRow";
 import { useMediaList } from "../../queries/movies";
+import LoadingScreen from "../../component/Loading/LoadingScreen";
 
 const Home = () => {
   //banner data
-  const { data: BannerMovieData } = useMediaList("movie", "popular", 1);
+  const { data: BannerMovieData, isLoading: isBannerLoading } = useMediaList("movie", "popular", 1);
   const movieData = BannerMovieData?.results ?? [];
 
-  const { data: TopRatedData } = useMediaList("movie", "top_rated", 1);
+  const { data: TopRatedData, isLoading: isTopRatedLoading } = useMediaList("movie", "top_rated", 1);
   const topMovieData = TopRatedData?.results ?? [];
 
-  const { data: topRatedMovie } = useMediaList("tv", "popular", 1);
+  const { data: topRatedMovie, isLoading: isTrendingTVLoading } = useMediaList("tv", "popular", 1);
   const trendingMovieData = topRatedMovie?.results ?? [];
 
-  const { data: topRatedTV } = useMediaList("tv", "top_rated", 1);
+  const { data: topRatedTV, isLoading: isTopRatedTVLoading } = useMediaList("tv", "top_rated", 1);
   const topRatedTVData = topRatedTV?.results ?? [];
+
+
+  const isLoading = isBannerLoading || isTopRatedLoading || isTrendingTVLoading || isTopRatedTVLoading;
+
+  if (isLoading) return <LoadingScreen />;
 
   return (
     <>

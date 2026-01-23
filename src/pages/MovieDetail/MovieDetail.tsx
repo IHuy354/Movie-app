@@ -3,6 +3,7 @@ import { useParams } from "react-router-dom";
 import MovieDetailHeader from "./MovieDetailHeader/MovieDetailHeader";
 import { useMediaDetail } from "../../queries/movies";
 import VideoYtb from "./Video/VideoYtb";
+import LoadingScreen from "../../component/Loading/LoadingScreen";
 
 type Param = {
   id?: string;
@@ -19,7 +20,7 @@ const MovieDetail = () => {
     isError,
   } = useMediaDetail(mediaType, numericId);
 
-  if (isLoading) return <div className="text-center">Loading...</div>;
+  if (isLoading) return <div><LoadingScreen/></div>;
   if (isError || !mediaData) return <div className="text-center">Error loading data</div>;
 
   const headerDetail = mediaData.detail ?? null;
