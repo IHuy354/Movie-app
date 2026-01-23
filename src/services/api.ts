@@ -1,71 +1,39 @@
 import axios from "./tmdbClient";
+import type { MovieResponse } from "../types/movie";
 
-type MediaType = "movie" | "tv";
+export type MediaType = "movie" | "tv";
+export type MediaCategory = "popular" | "top_rated";
 
-export const getPopularMovies = async () => {
-  const response = await axios.get("/movie/popular");
-  return response;
+const get = async <T>(url: string, params?: object): Promise<T> => {
+  const { data } = await axios.get(url, { params });
+  return data;
 };
-export const getTopMovies = async () => {
-  const response = await axios.get("/movie/top_rated");
-  return response;
-};
-export const getTrendingTV = async () => {
-  const response = await axios.get("tv/popular");
-  return response;
-};
-
-export const getTopratedTV = async () => {
-  const response = await axios.get("tv/top_rated");
-  return response;
-};
-// export const getgigido = async (prefix: string) => {
-//   const response = await axios.get(prefix);
-//   return response;
-// };
-
-export const getPagePopularMovies = async (page: number) => {
-  const response = await axios.get(`/movie/popular?page=${page}`);
-  return response.data;
-};
-export const getPageTVMovies = async (page: number) => {
-  const response = await axios.get(`/tv/popular?page=${page}`);
-  return response.data;
+export const getMediaList = (
+  type: MediaType,
+  category: MediaCategory,
+  page?: number,
+) => {
+  return get<MovieResponse>(
+    `/${type}/${category}`,
+    page ? { page } : undefined,
+  );
 };
 
-// detail
-export const getMovieSimilar = async (id: number) => {
-  const response = await axios.get(`/movie/${id}/similar`);
-  return response;
+export const getMediaDetail = (type: MediaType, id: number) => {
+  return get(`/${type}/${id}`);
 };
-export const getTVSimilar = async (id: number) => {
-  const response = await axios.get(`/tv/${id}/similar`);
-  return response;
+export const getMediaSimilar = (type: MediaType, id: number) => {
+  return get(`/${type}/${id}/similar`);
 };
-export const getTVDetail = async (id: number) => {
-  const response = await axios.get(`tv/${id}`);
-  return response;
+
+export const getMediaCredits = (type: MediaType, id: number) => {
+  return get(`/${type}/${id}/credits`);
 };
-export const getMovieDetail = async (id: number) => {
-  const response = await axios.get(`movie/${id}`);
-  return response;
+
+export const getMediaVideos = (type: MediaType, id: number) => {
+  return get(`/${type}/${id}/videos`);
 };
-export const getCreditsMoviesDetail = async (id: number) => {
-  const response = await axios.get(`movie/${id}/credits`);
-  return response;
-};
-export const getCreditsTVDetail = async (id: number) => {
-  const response = await axios.get(`tv/${id}/credits`);
-  return response;
-};
-export const getMovieVideoDetail = async (id: number) => {
-  const response = await axios.get(`movie/${id}/videos`);
-  return response;
-};
-export const getTVVideoDetail = async (id: number) => {
-  const response = await axios.get(`tv/${id}/videos`);
-  return response;
-};
+
 // tìm kiếm
 export const searchMedia = async (
   type: MediaType,
@@ -81,3 +49,6 @@ export const searchMedia = async (
 
   return response.data;
 };
+
+
+

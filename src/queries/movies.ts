@@ -1,99 +1,46 @@
 import { useQuery } from "@tanstack/react-query";
 import {
-  getMovieDetail,
-  getMovieSimilar,
-  getPagePopularMovies,
-  getPageTVMovies,
-  getPopularMovies,
-  getTopMovies,
-  getTopratedTV,
-  getTrendingTV,
-  getTVDetail,
-  searchMedia,
+  getMediaCredits,
+  getMediaDetail,
+  getMediaList,
+  getMediaSimilar,
+  getMediaVideos,
 } from "../services/api";
 
-export const usePopularMovies = () =>
-  useQuery({
-    queryKey: ["movies", "popular"],
-    queryFn: async () => {
-      const res = await getPopularMovies();
-      return res.data;
-    },
-  });
-
-export const useTopRatedMovies = () =>
-  useQuery({
-    queryKey: ["movies", "topRated"],
-    queryFn: async () => {
-      const res = await getTopMovies();
-      return res.data;
-    },
-  });
-
-export const usePopularTV = () =>
-  useQuery({
-    queryKey: ["tv", "popular"],
-    queryFn: async () => {
-      const res = await getTrendingTV();
-      return res.data;
-    },
-  });
-
-export const useTopRatedTV = () =>
-  useQuery({
-    queryKey: ["tv", "topRated"],
-    queryFn: async () => {
-      const res = await getTopratedTV();
-      return res.data;
-    },
-  });
-
-export const usePagePopularMovies = (page: number) =>
-  useQuery({
-    queryKey: ["movies", "popular", page],
-    queryFn: async () => {
-      const res = await getPagePopularMovies(page);
-      return res.data;
-    },
-  });
-export const usePageTVMovies = (page: number) =>
-  useQuery({
-    queryKey: ["tv", "page", page],
-    queryFn: async () => {
-      const res = await getPageTVMovies(page);
-      return res.data;
-    },
-  });
-
-export const useMovieSimilar = (id?: number) => {
+export type MediaType = "movie" | "tv";
+export type MediaCategory = "popular" | "top_rated";
+//  new
+export const useMediaList = (
+  type: MediaType | undefined,
+  category: MediaCategory,
+  page?: number,
+) => {
   return useQuery({
-    queryKey: ["movie", "similar", id],
-    queryFn: async () => {
-      const res = await getMovieSimilar(id!);
-      return res.data;
-    },
-    enabled: !!id,
+    queryKey: ["media", type, category, page],
+    queryFn: () => getMediaList(type, category, page),
   });
 };
 
+export const useMediaDetail = (mediaType?: string, id?: number) => {
+  return useQuery({
+    queryKey: ["media-detail", mediaType, id],
+    enabled: !!id && !!mediaType,
+    queryFn: async () => {
+      if (!id || !mediaType) return null;
 
-// export const useTVDetail = (id?: number) => {
-//   return useQuery({
-//     queryKey: ["tv", "id", id],
-//     queryFn: async () => {
-//       const res = await getTVDetail(id!);
-//       return res.data;
-//     },
-//     enabled: !!id,
-//   });
-// };
-// export const useMovieDetail = (id?: number) => {
-//   return useQuery({
-//     queryKey: ["movie", "id", id],
-//     queryFn: async () => {
-//       const res = await getMovieDetail(id!);
-//       return res.data;
-//     },
-//     enabled: !!id,
-//   });
-// };
+      const [detail, similar, casts, videos] = await Promise.all([
+        getMediaDetail(mediaType, id),
+        getMediaSimilar(mediaType, id),
+        getMediaCredits(mediaType, id),
+        getMediaVideos(mediaType, id),
+      ]);
+      return {
+        detail: detail ?? [],
+        similar: similar ?? [],
+        casts: casts ?? [],
+        videos: videos ?? [],
+      };
+    },
+  });
+};
+

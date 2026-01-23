@@ -6,6 +6,9 @@ export const useMediaNavigation = () => {
   const goToDetail = (mediaType: string, id: number) => {
     navigate(`/${mediaType}/${id}`);
   };
+    const goToSearch = (mediaType: string, keyword: string) => {
+    navigate(`/${mediaType}?search=${keyword}`);
+  };
 
-  return { goToDetail };
+  return { goToDetail, goToSearch };
 };

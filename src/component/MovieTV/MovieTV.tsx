@@ -2,23 +2,35 @@ import { FaPlay } from "react-icons/fa";
 import { getPosterUrl } from "../../utils/image";
 import { useMediaNavigation } from "../../hooks/useMediaNavigation";
 import { useState } from "react";
+import MovieSkeleton from "../Loading/MovieSkeleton";
+import type { MovieMediaProps } from "./libs/MovieMediaProps";
 
-const Moviecpn = ({ title, data, setPage, page, type, setSearch }) => {
-  const { goToDetail } = useMediaNavigation();
-  const [keyword, setKeyword] = useState("");
-  const handleClick = () => {
-    setPage(page + 1);
-  };
+const Media = ({
+  title,
+  data,
+  onLoadMore,
+  hasMore,
+  isLoadingMore,
+  type,
+  search,
+  onSearch,
+}: MovieMediaProps) => {
+  const { goToSearch, goToDetail } = useMediaNavigation();
+  const [keyword, setKeyword] = useState(search);
+
   const handleSearch = (e) => {
     e.preventDefault();
-    setSearch(keyword);
-    setPage(1);
+    onSearch(keyword);
+    goToSearch(type, keyword);
   };
+
+  const SKELETON_COUNT = 20;
+  const skeletonArray = Array.from({ length: SKELETON_COUNT });
   return (
     <>
-      {/* header màu trắng  */}
-      <div className="relative w-full h-50 -mt-26">
-        <div className="absolute inset-0 bg-gradient-to-b from-white to-[#0f0f0f]"></div>
+      {/* header white  */}
+      <div className="relative w-full h-50 -mt-26 ">
+        <div className="absolute inset-0 bg-linear-to-b from-white to-[#0f0f0f]"></div>
 
         {/* Title header */}
         <div className="absolute inset-0 flex items-center justify-center text-white text-4xl font-bold">
@@ -27,11 +39,8 @@ const Moviecpn = ({ title, data, setPage, page, type, setSearch }) => {
       </div>
       {/* body  */}
       <div className=" mt-15 pb-10 px-10">
-        {/* Thanh tìm kiếm  */}
-        <form
-          onSubmit={handleSearch}
-          className=" relative w-full  max-w-[520px]"
-        >
+        {/* Search input  */}
+        <form onSubmit={handleSearch} className=" relative w-130">
           <input
             type="text"
             placeholder="Enter Keyword "
@@ -41,16 +50,16 @@ const Moviecpn = ({ title, data, setPage, page, type, setSearch }) => {
           />
           <button
             type="submit"
-            className="absolute font-[500] cursor-pointer right-10 bg-red-600 hover:bg-red-500 transition duration-300 rounded-full px-7 py-2 shadow-[1px_1px_15px_3px_#fe0000]  hover:shadow-[1px_1px_27px_7px_#fe0000] duration-300"
+            className="absolute font-medium cursor-pointer right-10 bg-red-600 hover:bg-red-500 transition duration-300 rounded-full px-7 py-2 shadow-[1px_1px_15px_3px_#fe0000]  hover:shadow-[1px_1px_27px_7px_#fe0000] duration-300"
           >
             Search
           </button>
         </form>
-        {/* Danh sách phim  */}
-        <div className="grid grid-cols-6 gap-5 mt-15">
-          {data?.map((movie, index) => (
+        {/* media list  */}
+        <div className="grid grid-cols-6  gap-5 mt-15">
+          {data?.map((movie) => (
             <div
-              key={index}
+              key={movie.id}
               className="cursor-pointer"
               onClick={() => {
                 goToDetail(type, movie.id);
@@ -73,23 +82,34 @@ const Moviecpn = ({ title, data, setPage, page, type, setSearch }) => {
                 </div>
               </div>
 
-              <p className="font-[500] mt-3 mb-3">
+              <p className="font-medium mt-3 mb-3">
                 {movie.title || movie.original_name}
               </p>
             </div>
           ))}
+          {isLoadingMore &&
+            skeletonArray.map((index) => (
+              <div key={`skeleton-${index}`}>
+                <MovieSkeleton />
+              </div>
+            ))}
         </div>
-        <div className="flex justify-center w-full mt-5">
-          <button
-            onClick={handleClick}
-            className="border-2 rounded-3xl px-7 cursor-pointer font-[500] text-[18px] hover:text-red-600 duration-300 hover:bg-amber-50 hover:border-white"
-          >
-            Watch more
-          </button>
-        </div>
+
+        {/* Load more button  */}
+        {hasMore && (
+          <div className="flex justify-center mt-10">
+            <button
+              onClick={onLoadMore}
+              disabled={isLoadingMore}
+              className="cursor-pointer border-2 rounded-3xl px-6  font-medium text-[17px] hover:text-red-600 hover:bg-amber-50 hover:border-white duration-300"
+            >
+              {isLoadingMore ? "Loading..." : "Load More"}
+            </button>
+          </div>
+        )}
       </div>
     </>
   );
 };
 
-export default Moviecpn;
+export default Media;

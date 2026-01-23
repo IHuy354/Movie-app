@@ -1,9 +1,9 @@
 import { Route, Routes } from "react-router-dom";
 import Home from "./pages/Home/Home";
 import MainLayout from "./Layout/MainLayout";
-import Movies from "./pages/Movies/Movies";
-import TvSeries from "./pages/TvSeries/TvSeries";
+ 
 import MovieDetail from "./pages/MovieDetail/MovieDetail";
+import Media from "./pages/Media/Media";
 
 function App() {
   return (
@@ -12,11 +12,11 @@ function App() {
         <Routes>
           <Route path="/" element={<MainLayout />}>
             <Route index element={<Home />}></Route>
-            <Route path="movie" element={<Movies />}></Route>
-            <Route path="tv" element={<TvSeries />}></Route>
 
+            {/* page chung cho movie và tv  */}
+            <Route path=":mediaType" element={<Media />} />
             {/* detail page */}
-            <Route path=":mediaType/:id" element={<MovieDetail/>}></Route>
+            <Route path=":mediaType/:id" element={<MovieDetail />}></Route>
           </Route>
         </Routes>
       </div>
