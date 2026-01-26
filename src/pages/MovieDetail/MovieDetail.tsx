@@ -3,7 +3,7 @@ import { useParams } from "react-router-dom";
 import MovieDetailHeader from "./MovieDetailHeader/MovieDetailHeader";
 import { useMediaDetail } from "../../queries/movies";
 import VideoYtb from "./Video/VideoYtb";
-import LoadingScreen from "../../component/Loading/LoadingScreen";
+import LoadingScreen from "../../components/Loading/LoadingScreen";
 
 type Param = {
   id?: string;

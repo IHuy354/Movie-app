@@ -1,7 +1,7 @@
 import { FaPlay } from "react-icons/fa";
 import { getPosterUrl } from "../../utils/image";
 import { useMediaNavigation } from "../../hooks/useMediaNavigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import MovieSkeleton from "../Loading/MovieSkeleton";
 import type { MovieMediaProps } from "./libs/MovieMediaProps";
 
@@ -11,12 +11,14 @@ const Media = ({
   onLoadMore,
   hasMore,
   isLoadingMore,
+  isFetching,
   type,
   search,
   onSearch,
 }: MovieMediaProps) => {
   const { goToSearch, goToDetail } = useMediaNavigation();
-  const [keyword, setKeyword] = useState(search);
+  const [keyword, setKeyword] = useState("");
+
 
   const handleSearch = (e) => {
     e.preventDefault();
@@ -38,7 +40,7 @@ const Media = ({
         </div>
       </div>
       {/* body  */}
-      <div className=" mt-15 pb-10 px-10">
+      <div className=" mt-15 pb-10 px-12">
         {/* Search input  */}
         <form onSubmit={handleSearch} className=" relative w-130">
           <input
@@ -50,9 +52,10 @@ const Media = ({
           />
           <button
             type="submit"
+            disabled={isFetching}
             className="absolute font-medium cursor-pointer right-10 bg-red-600 hover:bg-red-500 transition duration-300 rounded-full px-7 py-2 shadow-[1px_1px_15px_3px_#fe0000]  hover:shadow-[1px_1px_27px_7px_#fe0000] duration-300"
           >
-            Search
+            {isFetching ? "Loading..." : "Search"}
           </button>
         </form>
         {/* media list  */}
@@ -67,15 +70,15 @@ const Media = ({
             >
               <div className="relative group">
                 <img
-                  className="rounded-3xl h-87"
-                  src={getPosterUrl(movie?.poster_path)}
+                  className="rounded-3xl h-85 w-full object-cover"
+                  src={getPosterUrl(movie?.poster_path, "img")}
                   alt={movie.title}
                 />
                 {/* Overlay */}
                 <div className=" absolute inset-0 rounded-3xl bg-black/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
                   <button
                     className="bg-red-600 cursor-pointer w-21 h-12 rounded-3xl shadow-[1px_1px_27px_7px_#fe0000] flex items-center justify-center  scale-0
-                                              group-hover:scale-100 transition duration-300"
+                                                group-hover:scale-100 transition duration-300"
                   >
                     <FaPlay className="size-3" />
                   </button>
@@ -88,12 +91,17 @@ const Media = ({
             </div>
           ))}
           {isLoadingMore &&
-            skeletonArray.map((index) => (
+            skeletonArray.map((_, index) => (
               <div key={`skeleton-${index}`}>
                 <MovieSkeleton />
               </div>
             ))}
         </div>
+        {data.length === 0 && search.length > 0 && (
+          <div className="text-center text-white text-2xl mt-10">
+            Không tìm thấy firm cho từ khóa: "{search}"
+          </div>
+        )}
 
         {/* Load more button  */}
         {hasMore && (

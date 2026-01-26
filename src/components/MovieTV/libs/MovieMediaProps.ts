@@ -7,6 +7,7 @@ export interface MovieMediaProps {
   onLoadMore: () => void;
   hasMore: boolean;
   isLoadingMore: boolean;
+  isLoading: boolean;
   type?: MediaType;
   search: string;
   onSearch: (query: string) => void;

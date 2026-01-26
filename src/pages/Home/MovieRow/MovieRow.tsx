@@ -7,21 +7,21 @@ import { Autoplay } from "swiper/modules";
 import type { MovieRowProps } from "./libs/types";
 
 const MovieRow = ({ title, movies, type }: MovieRowProps) => {
-    const { goToDetail } = useMediaNavigation();
+  const { goToDetail } = useMediaNavigation();
   const navigate = useNavigate();
 
   if (!movies.length) return null;
-
-
 
   return (
     <div className="px-9 mt-10">
       {/* Header */}
       <div className="flex justify-between mt-5">
-        <h3 className="font-medium text-[23px]">{title}</h3>
+        <h3 className="font-medium sm:text-base md:text-xl lg:text-2xl xl:text-[23px]">
+          {title}
+        </h3>
         <button
           onClick={() => navigate(`${type}`)}
-          className="cursor-pointer border-2 rounded-3xl px-6 font-medium text-[17px] hover:text-red-600 hover:bg-amber-50 hover:border-white duration-300"
+          className="cursor-pointer border-2 rounded-3xl px-6 font-medium text-[11px] sm:text-[12px] md:text-[14px] lg:text-15px xl:text-[17px] hover:text-red-600 hover:bg-amber-50 hover:border-white duration-300"
         >
           View more
         </button>
@@ -31,7 +31,12 @@ const MovieRow = ({ title, movies, type }: MovieRowProps) => {
       <div className="mt-7">
         <Swiper
           modules={[Autoplay]}
-          slidesPerView={6}
+          breakpoints={{
+            0: { slidesPerView: 2 },
+            640: { slidesPerView: 3 },
+            768: { slidesPerView: 4 },
+            1024: { slidesPerView: 6 },
+          }}
           spaceBetween={16}
           loop
           speed={400}
@@ -40,7 +45,6 @@ const MovieRow = ({ title, movies, type }: MovieRowProps) => {
           }}
           className="w-full"
         >
-          
           {movies.map((movie) => (
             <SwiperSlide key={movie.id}>
               <div
@@ -51,7 +55,7 @@ const MovieRow = ({ title, movies, type }: MovieRowProps) => {
                   <img
                     src={getPosterUrl(movie.poster_path)}
                     alt={movie.title}
-                    className="w-full h-87 rounded-3xl"
+                    className="w-full h-65 xl:h-87 rounded-3xl"
                     draggable={false}
                   />
 
@@ -60,7 +64,7 @@ const MovieRow = ({ title, movies, type }: MovieRowProps) => {
                     <button
                       className="bg-red-600 w-21 h-12 rounded-3xl shadow-[1px_1px_27px_7px_#fe0000]
                                  flex items-center justify-center scale-0 group-hover:scale-100
-                                 transition duration-300 cursor-pointer" 
+                                 transition duration-300 cursor-pointer"
                     >
                       <FaPlay className="size-3" />
                     </button>

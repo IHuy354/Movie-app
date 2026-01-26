@@ -65,6 +65,7 @@ const Banner = ({ movies }: { movies: Movie[] }) => {
                 </div>
               )}
 
+              {/* On backgr  */}
               <div className="absolute inset-0 flex items-center px-20 gap-15 ">
                 <div>
                   {activeIndex === index && (
@@ -73,7 +74,7 @@ const Banner = ({ movies }: { movies: Movie[] }) => {
                         initial={{ y: -60, opacity: 0 }}
                         animate={{ y: 0, opacity: 1 }}
                         transition={{ duration: 0.6 }}
-                        className="text-[87px] font-bold"
+                        className="text-4xl md:text-5xl lg:text-6xl xl:text-[87px] font-bold"
                       >
                         {movie.title}
                       </motion.h1>
@@ -82,7 +83,7 @@ const Banner = ({ movies }: { movies: Movie[] }) => {
                         initial={{ y: -40, opacity: 0 }}
                         animate={{ y: 0, opacity: 1 }}
                         transition={{ delay: 0.3, duration: 0.6 }}
-                        className="font-medium text-[20px] mt-10"
+                        className="   font-medium text-sm sm:text-base lg:text-[20px] mt-4  line-clamp-3 lg:line-clamp-none"
                       >
                         {movie.overview}
                       </motion.p>
@@ -95,7 +96,7 @@ const Banner = ({ movies }: { movies: Movie[] }) => {
                       >
                         <button
                           onClick={() => navigate(`movie/${movie.id}`)}
-                          className=" cursor-pointer bg-[#fe0000] rounded-3xl px-9 py-1 font-medium text-[23px] shadow-[1px_1px_21px_3px_#fe0000] hover:shadow-[1px_1px_27px_7px_#fe0000] duration-300"
+                          className=" cursor-pointer bg-[#fe0000] rounded-3xl px-4 py-1 sm:px-4 md:px-6 lg:px-9 font-medium text-[7px] sm:text-[10px] md:text-[12px] lg:text-[23px] shadow-[1px_1px_21px_3px_#fe0000] hover:shadow-[1px_1px_27px_7px_#fe0000] duration-300"
                         >
                           Watch now
                         </button>
@@ -120,7 +121,7 @@ const Banner = ({ movies }: { movies: Movie[] }) => {
                         transition={{ duration: 0.6 }}
                         src={getPosterUrl(movie.poster_path)}
                         alt={movie.title}
-                        className="w-95 rounded-3xl mr-10"
+                        className="hidden sm:hidden md:hidden lg:block lg:w-75 xl:w-95 rounded-3xl mr-10"
                       />
                     )}
                   </>

@@ -1,5 +1,5 @@
 import { NavLink } from "react-router-dom";
-import LogoTitle from "../component/LogoTitle/LogoTitle";
+import LogoTitle from "../components/LogoTitle/LogoTitle";
 import { useEffect, useState } from "react";
 
 const navLinkClass = ({ isActive }: { isActive: boolean }) =>

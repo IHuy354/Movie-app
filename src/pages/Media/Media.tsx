@@ -1,10 +1,10 @@
 import { useParams, useSearchParams } from "react-router-dom";
 import { useMediaSearch } from "../../hooks/useMediaSearch";
-import MovieComponent from "../../component/MovieTV/MovieTV";
+import MovieComponent from "../../components/MovieTV/MovieTV";
 import type { MediaType } from "../../services/api";
-import LoadingScreen from "../../component/Loading/LoadingScreen";
+import LoadingScreen from "../../components/Loading/LoadingScreen";
 
-const MediaPage = () => {
+const Media = () => {
   const { mediaType } = useParams();
   const [searchParams] = useSearchParams();
   const initialSearch = searchParams.get("search") || "";
@@ -12,7 +12,7 @@ const MediaPage = () => {
   const {
     data,
     isLoading,
-    isError,
+    isFetching,
     hasNextPage,
     isFetchingNextPage,
     loadMore,
@@ -24,8 +24,7 @@ const MediaPage = () => {
     initialSearch,
   });
 
-  if (isLoading) return <div ><LoadingScreen/></div>;
-  if (isError) return <div className="text-center">Error loading data</div>;
+  if (isLoading) return <LoadingScreen />;
 
   return (
     <MovieComponent
@@ -34,6 +33,7 @@ const MediaPage = () => {
       onLoadMore={loadMore}
       hasMore={hasNextPage}
       isLoadingMore={isFetchingNextPage}
+      isFetching={isFetching}
       type={mediaType}
       search={search}
       onSearch={handleSearch}
@@ -41,4 +41,4 @@ const MediaPage = () => {
   );
 };
 
-export default MediaPage;
+export default Media;

@@ -1,35 +1,30 @@
 import Banner from "./Banner/Banner";
 import MovieRow from "./MovieRow/MovieRow";
+import LoadingScreen from "../../components/Loading/LoadingScreen";
 import { useMediaList } from "../../queries/movies";
-import LoadingScreen from "../../component/Loading/LoadingScreen";
+import { useHomeSections } from "./libs/useHomeSections";
 
 const Home = () => {
-  //banner data
-  const { data: BannerMovieData, isLoading: isBannerLoading } = useMediaList("movie", "popular", 1);
-  const movieData = BannerMovieData?.results ?? [];
+  const bannerQuery = useMediaList("movie", "popular", 1);
+  const { sections, isLoading } = useHomeSections();
 
-  const { data: TopRatedData, isLoading: isTopRatedLoading } = useMediaList("movie", "top_rated", 1);
-  const topMovieData = TopRatedData?.results ?? [];
-
-  const { data: topRatedMovie, isLoading: isTrendingTVLoading } = useMediaList("tv", "popular", 1);
-  const trendingMovieData = topRatedMovie?.results ?? [];
-
-  const { data: topRatedTV, isLoading: isTopRatedTVLoading } = useMediaList("tv", "top_rated", 1);
-  const topRatedTVData = topRatedTV?.results ?? [];
-
-
-  const isLoading = isBannerLoading || isTopRatedLoading || isTrendingTVLoading || isTopRatedTVLoading;
-
-  if (isLoading) return <LoadingScreen />;
+  if (bannerQuery.isLoading || isLoading) {
+    return <LoadingScreen />;
+  }
 
   return (
     <>
-      <Banner movies={movieData} />
-      <div className=" py-10">
-        <MovieRow title="Trending Movies" movies={movieData} type="movie" />
-        <MovieRow title="Top Rated Movies" movies={topMovieData} type="movie" />
-        <MovieRow title="Trending TV" movies={trendingMovieData} type="tv" />
-        <MovieRow title="Top Rated TV" movies={topRatedTVData} type="tv" />
+      <Banner movies={bannerQuery.data?.results ?? []} />
+
+      <div className="py-10">
+        {sections.map((section) => (
+          <MovieRow
+            key={`${section.type}-${section.category}`}
+            title={section.title}
+            type={section.type}
+            movies={section.movies}
+          />
+        ))}
       </div>
     </>
   );

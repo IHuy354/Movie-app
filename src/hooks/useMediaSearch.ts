@@ -3,11 +3,11 @@ import { useState, useCallback } from "react";
 import { getMediaList, searchMedia } from "../services/api";
 import type { MediaType, MediaCategory } from "../services/api";
 
-interface UseMediaSearchOptions {
+export type UseMediaSearchOptions = {
   type: MediaType | undefined;
   category?: MediaCategory;
   initialSearch?: string;
-}
+};
 
 export const useMediaSearch = ({
   type,
@@ -15,12 +15,11 @@ export const useMediaSearch = ({
   initialSearch = "",
 }: UseMediaSearchOptions) => {
   const [search, setSearch] = useState(initialSearch);
-
   const isSearching = search.trim().length > 0;
-
   const {
     data,
     isLoading,
+    isFetching,
     isError,
     hasNextPage,
     fetchNextPage,
@@ -35,13 +34,14 @@ export const useMediaSearch = ({
       }
     },
     initialPageParam: 1,
-    getNextPageParam: (lastPage, pages) => {
+    getNextPageParam: (lastPage) => {
       if (lastPage.page < lastPage.total_pages) {
         return lastPage.page + 1;
       }
       return undefined;
     },
     enabled: !!type,
+    placeholderData: (previousData) => previousData,
   });
 
   const allResults = data?.pages.flatMap((page) => page.results) ?? [];
@@ -59,8 +59,9 @@ export const useMediaSearch = ({
   return {
     data: allResults,
     isLoading,
+    isFetching,
     isError,
-    hasNextPage: !!hasNextPage,
+    hasNextPage,
     isFetchingNextPage,
     loadMore,
     handleSearch,

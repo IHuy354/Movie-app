@@ -5,6 +5,7 @@ import MainLayout from "./Layout/MainLayout";
 import MovieDetail from "./pages/MovieDetail/MovieDetail";
 import Media from "./pages/Media/Media";
 
+
 function App() {
   return (
     <>

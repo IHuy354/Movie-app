@@ -4,7 +4,7 @@ import App from "./App.tsx";
 import { BrowserRouter } from "react-router-dom";
 import { QueryClientProvider } from "@tanstack/react-query";
 import { queryClient } from "./services/query-client.ts";
-import ScrollToTop from "./component/ScrollToTop.tsx";
+import ScrollToTop from "./components/ScrollToTop.tsx";
 import "react-loading-skeleton/dist/skeleton.css";
 import { SkeletonTheme } from "react-loading-skeleton";
 
